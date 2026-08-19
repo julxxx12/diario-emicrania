@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<meta name="theme-color" content="#332b4d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Diario Emicrania">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+
+<title>DIARIO EMICRANIA</title>
+
+<style>
+
+:root {
+    --sfondo: #332b4d;
+    --lilla-tabella: #eee7f5;
+    --lilla-chiaro: #f8f5fb;
+    --viola: #6b5b95;
+    --viola-selezione: #d8cceb;
+    --viola-bordo: #8c76b5;
+    --azzurro: #4389b4;
+    --azzurro-chiaro: #78b5d5;
+    --testo: #29252f;
+    --grigio: #77717b;
+    --bordo: #d8d0e4;
+    --rosso: #a34f4f;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    background: var(--sfondo);
+    color: var(--testo);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+main {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 14px 10px 45px;
+}
+
+h1 {
+    margin: 4px 4px 18px;
+    color: white;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.card {
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 11px;
+    background: var(--lilla-tabella);
+    border-radius: 17px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.16);
+}
+
+.section-title {
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 9px 10px;
+    background: var(--viola);
+    color: white;
+    border-radius: 9px;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.title-row {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.title-row .section-title {
+    flex: 1;
+    margin: 0;
+}
+
+.now-button {
+    flex: 0 0 auto;
+    min-width: 78px;
+    min-height: 44px;
+    padding: 8px 11px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--viola);
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.subsection {
+    width: 100%;
+    margin-top: 9px;
+    padding: 9px;
+    background: var(--lilla-chiaro);
+    border: 1px solid var(--bordo);
+    border-radius: 13px;
+}
+
+.subsection-title {
+    width: 100%;
+    margin-bottom: 9px;
+    padding: 8px 9px;
+    background: var(--viola);
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 750;
+}
+
+.date-time {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+}
+
+input,
+select,
+textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--bordo);
+    border-radius: 10px;
+    background: white;
+    color: var(--testo);
+    font-size: 16px;
+    line-height: 1.3;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--viola-bordo);
+    box-shadow: 0 0 0 2px rgba(107,91,149,.12);
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.choice {
+    width: 100%;
+    min-height: 45px;
+    padding: 9px 10px;
+    border: 1px solid var(--bordo);
+    border-radius: 10px;
+    background: white;
+    color: var(--testo);
+    text-align: left;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.25;
+}
+
+.choice:active {
+    transform: scale(.98);
+}
+
+.choice.selected {
+    padding: 8px 9px;
+    border: 2px solid var(--viola-bordo);
+    background: var(--viola-selezione);
+    color: var(--viola);
+}
+
+.medicine-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+}
+
+.add-row {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-top: 9px;
+}
+
+.add-row input {
+    flex: 1;
+    min-width: 0;
+}
+
+.add-button {
+    flex: 0 0 86px;
+    min-height: 44px;
+    padding: 9px 10px;
+    border: 2px solid var(--azzurro);
+    border-radius: 10px;
+    background: var(--azzurro-chiaro);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.efficacy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.confirmed-note {
+    display: none;
+    width: 100%;
+    margin-bottom: 9px;
+    padding: 10px;
+    border: 1px solid var(--viola-bordo);
+    border-radius: 10px;
+    background: var(--viola-selezione);
+    color: var(--viola);
+    font-size: 14px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+.confirmed-note.visible {
+    display: block;
+}
+
+.save-button {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 14px;
+    padding: 12px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--viola);
+    color: white;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.history {
+    width: 100%;
+    max-height: 340px;
+    margin-top: 9px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    text-align: center;
+}
+
+.entry {
+    width: 100%;
+    padding: 13px 2px;
+    border-top: 1px solid var(--bordo);
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.entry:first-child {
+    border-top: 0;
+}
+
+.entry-date {
+    font-weight: 800;
+}
+
+.entry-meta {
+    margin-top: 4px;
+    color: var(--grigio);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.entry-info {
+    margin-top: 7px;
+    font-size: 14px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+.delete-button {
+    min-height: 42px;
+    margin-top: 9px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 10px;
+    background: #f8eaea;
+    color: var(--rosso);
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.export-button {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px;
+    border: 2px solid var(--azzurro);
+    border-radius: 10px;
+    background: var(--azzurro-chiaro);
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+@media (max-width: 420px) {
+
+    main {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    .card {
+        padding: 9px;
+    }
+
+    .section-title {
+        font-size: 17px;
+    }
+
+    .now-button {
+        min-width: 72px;
+        font-size: 14px;
+    }
+
+    .choice {
+        min-height: 46px;
+        font-size: 13px;
+    }
+
+    .add-button {
+        flex-basis: 82px;
+    }
+}
+
+@media (max-width: 350px) {
+
+    .date-time {
+        grid-template-columns: 1fr;
+    }
+
+    .efficacy-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .add-row {
+        flex-direction: column;
+    }
+
+    .add-button {
+        width: 100%;
+        flex-basis: auto;
+    }
+
+    .title-row {
+        flex-direction: column;
+    }
+
+    .now-button {
+        width: 100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>DIARIO EMICRANIA</h1>
+
+<section class="card">
+
+    <div class="title-row">
+
+        <h2 class="section-title">
+            Nuovo attacco
+        </h2>
+
+        <button
+            type="button"
+            class="now-button"
+            id="nowButton">
+            Adesso
+        </button>
+
+    </div>
+
+    <div class="date-time">
+
+        <div class="subsection">
+
+            <div class="subsection-title">
+                Data
+            </div>
+
+            <input
+                id="date"
+                type="date">
+
+        </div>
+
+        <div class="subsection">
+
+            <div class="subsection-title">
+                Ora
+            </div>
+
+            <input
+                id="time"
+                type="time">
+
+        </div>
+
+    </div>
+
+    <div class="subsection">
+
+        <div class="subsection-title">
+            Intensità
+        </div>
+
+        <select id="pain">
+
+            <option value="">
+                Non so
+            </option>
+
+            <option value="1/10">1/10</option>
+            <option value="2/10">2/10</option>
+            <option value="3/10">3/10</option>
+            <option value="4/10">4/10</option>
+            <option value="5/10">5/10</option>
+            <option value="6/10">6/10</option>
+            <option value="7/10">7/10</option>
+            <option value="8/10">8/10</option>
+            <option value="9/10">9/10</option>
+            <option value="10/10">10/10</option>
+
+        </select>
+
+    </div>
+
+    <div class="subsection">
+
+        <div class="subsection-title">
+            Sintomi
+        </div>
+
+        <div class="choice-grid" id="symptoms">
+
+            <button type="button" class="choice symptom" data-value="Nausea">
+                Nausea
+            </button>
+
+            <button type="button" class="choice symptom" data-value="Sensibilità alla luce">
+                Sensibilità alla luce
+            </button>
+
+            <button type="button" class="choice symptom" data-value="Aura">
+                Aura
+            </button>
+
+            <button type="button" class="choice symptom" data-value="Vertigini">
+                Vertigini
+            </button>
+
+            <button type="button" class="choice symptom" data-value="Fastidio agli occhi">
+                Fastidio agli occhi
+            </button>
+
+            <button type="button" class="choice symptom" data-value="Afasia">
+                Afasia
+            </button>
+
+        </div>
+
+        <div class="add-row">
+
+            <input
+                id="customSymptom"
+                type="text"
+                placeholder="Scrivi un altro sintomo...">
+
+            <button
+                type="button"
+                class="add-button"
+                id="addSymptom">
+                Aggiungi
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="subsection">
+
+        <div class="subsection-title">
+            Farmaco
+        </div>
+
+        <div
+            class="medicine-grid"
+            id="medicineGrid">
+
+            <button
+                type="button"
+                class="choice medicine"
+                data-value="Buscofen 400mg">
+                Buscofen 400mg
+            </button>
+
+        </div>
+
+        <div class="add-row">
+
+            <input
+                id="otherMedicine"
+                type="text"
+                placeholder="Scrivi il tuo farmaco">
+
+            <button
+                type="button"
+                class="add-button"
+                id="addMedicine">
+                Aggiungi
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="subsection">
+
+        <div class="subsection-title">
+            Il farmaco è stato efficace?
+        </div>
+
+        <div class="efficacy-grid">
+
+            <button
+                type="button"
+                class="choice efficacy"
+                data-value="Sì">
+                Sì
+            </button>
+
+            <button
+                type="button"
+                class="choice efficacy"
+                data-value="No">
+                No
+            </button>
+
+            <button
+                type="button"
+                class="choice efficacy"
+                data-value="Non del tutto">
+                Non del tutto
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="subsection">
+
+        <div class="subsection-title">
+            Note
+        </div>
+
+        <div
+            id="confirmedNote"
+            class="confirmed-note">
+        </div>
+
+        <textarea
+            id="notes"
+            placeholder="Scrivi una nota..."></textarea>
+
+        <div class="add-row">
+
+            <div style="flex:1;"></div>
+
+            <button
+                type="button"
+                class="add-button"
+                id="addNote">
+                Aggiungi
+            </button>
+
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        class="save-button"
+        id="saveButton">
+        SALVA
+    </button>
+
+</section>
+
+<section class="card">
+
+    <h2 class="section-title">
+        Cronologia degli attacchi
+    </h2>
+
+    <div
+        id="history"
+        class="history">
+        ...
+    </div>
+
+</section>
+
+<section class="card">
+
+    <button
+        type="button"
+        class="export-button"
+        id="exportButton">
+        Esporta Diario Emicrania
+    </button>
+
+</section>
+
+</main>
+
+<script>
+
+(function () {
+
+"use strict";
+
+var STORAGE_KEY = "diario_emicrania_definitivo_mobile";
+
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+
+function pad(number) {
+    return String(number).padStart(2, "0");
+}
+
+
+function setNow() {
+
+    var now = new Date();
+
+    $("date").value =
+        now.getFullYear() +
+        "-" +
+        pad(now.getMonth() + 1) +
+        "-" +
+        pad(now.getDate());
+
+    $("time").value =
+        pad(now.getHours()) +
+        ":" +
+        pad(now.getMinutes());
+}
+
+
+function getAttacks() {
+
+    try {
+
+        var raw =
+            localStorage.getItem(STORAGE_KEY);
+
+        if (!raw) {
+            return [];
+        }
+
+        var data =
+            JSON.parse(raw);
+
+        return Array.isArray(data)
+            ? data
+            : [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+}
+
+
+function storeAttacks(data) {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(data)
+        );
+
+        return true;
+
+    } catch (error) {
+
+        alert(
+            "Impossibile salvare i dati sul dispositivo."
+        );
+
+        return false;
+    }
+}
+
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================
+   ADESSO
+   ========================= */
+
+$("nowButton").addEventListener(
+    "click",
+    function () {
+
+        setNow();
+
+    },
+    false
+);
+
+
+/* =========================
+   SINTOMI
+   ========================= */
+
+function activateSymptom(button) {
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            button.classList.toggle(
+                "selected"
+            );
+
+        },
+        false
+    );
+}
+
+
+document
+    .querySelectorAll(".symptom")
+    .forEach(function (button) {
+
+        activateSymptom(button);
+
+    });
+
+
+$("addSymptom").addEventListener(
+    "click",
+    function () {
+
+        var input =
+            $("customSymptom");
+
+        var value =
+            input.value.trim();
+
+        if (!value) {
+
+            input.focus();
+
+            return;
+        }
+
+        var symptoms =
+            document.querySelectorAll(
+                ".symptom"
+            );
+
+        for (
+            var i = 0;
+            i < symptoms.length;
+            i++
+        ) {
+
+            if (
+                symptoms[i]
+                    .dataset
+                    .value
+                    .toLowerCase() ===
+                value.toLowerCase()
+            ) {
+
+                symptoms[i]
+                    .classList
+                    .add("selected");
+
+                input.value = "";
+
+                return;
+            }
+        }
+
+        var button =
+            document.createElement(
+                "button"
+            );
+
+        button.type =
+            "button";
+
+        button.className =
+            "choice symptom selected custom-symptom";
+
+        button.dataset.value =
+            value;
+
+        button.textContent =
+            value;
+
+        activateSymptom(button);
+
+        $("symptoms")
+            .appendChild(button);
+
+        input.value = "";
+
+    },
+    false
+);
+
+
+$("customSymptom").addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter" ||
+            event.keyCode === 13
+        ) {
+
+            event.preventDefault();
+
+            $("addSymptom").click();
+
+        }
+
+    },
+    false
+);
+
+
+/* =========================
+   FARMACI
+   ========================= */
+
+function deselectMedicines() {
+
+    document
+        .querySelectorAll(".medicine")
+        .forEach(function (button) {
+
+            button.classList.remove(
+                "selected"
+            );
+
+        });
+}
+
+
+function activateMedicine(button) {
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            deselectMedicines();
+
+            button.classList.add(
+                "selected"
+            );
+
+        },
+        false
+    );
+}
+
+
+document
+    .querySelectorAll(".medicine")
+    .forEach(function (button) {
+
+        activateMedicine(button);
+
+    });
+
+
+$("addMedicine").addEventListener(
+    "click",
+    function () {
+
+        var input =
+            $("otherMedicine");
+
+        var value =
+            input.value.trim();
+
+        if (!value) {
+
+            input.focus();
+
+            return;
+        }
+
+        var old =
+            document.getElementById(
+                "customMedicineChoice"
+            );
+
+        if (old) {
+            old.remove();
+        }
+
+        var button =
+            document.createElement(
+                "button"
+            );
+
+        button.type =
+            "button";
+
+        button.id =
+            "customMedicineChoice";
+
+        button.className =
+            "choice medicine selected";
+
+        button.dataset.value =
+            value;
+
+        button.textContent =
+            value;
+
+        activateMedicine(button);
+
+        $("medicineGrid")
+            .insertBefore(
+                button,
+                $("medicineGrid").firstChild
+            );
+
+        deselectMedicines();
+
+        button.classList.add(
+            "selected"
+        );
+
+        input.value = "";
+
+    },
+    false
+);
+
+
+$("otherMedicine").addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter" ||
+            event.keyCode === 13
+        ) {
+
+            event.preventDefault();
+
+            $("addMedicine").click();
+
+        }
+
+    },
+    false
+);
+
+
+/* =========================
+   EFFICACIA
+   ========================= */
+
+document
+    .querySelectorAll(".efficacy")
+    .forEach(function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                document
+                    .querySelectorAll(
+                        ".efficacy"
+                    )
+                    .forEach(
+                        function (item) {
+
+                            item.classList.remove(
+                                "selected"
+                            );
+
+                        }
+                    );
+
+                button.classList.add(
+                    "selected"
+                );
+
+            },
+            false
+        );
+
+    });
+
+
+/* =========================
+   NOTE
+   ========================= */
+
+$("addNote").addEventListener(
+    "click",
+    function () {
+
+        var text =
+            $("notes")
+                .value
+                .trim();
+
+        if (!text) {
+
+            $("notes").focus();
+
+            return;
+        }
+
+        $("confirmedNote")
+            .textContent = text;
+
+        $("confirmedNote")
+            .classList
+            .add("visible");
+
+    },
+    false
+);
+
+
+/* =========================
+   SALVA
+   ========================= */
+
+$("saveButton").addEventListener(
+    "click",
+    function () {
+
+        var date =
+            $("date").value;
+
+        if (!date) {
+
+            alert(
+                "Inserisci la data dell'attacco."
+            );
+
+            return;
+        }
+
+        var symptoms = [];
+
+        document
+            .querySelectorAll(
+                ".symptom.selected"
+            )
+            .forEach(function (button) {
+
+                symptoms.push(
+                    button.dataset.value
+                );
+
+            });
+
+        var medicineButton =
+            document.querySelector(
+                ".medicine.selected"
+            );
+
+        var efficacyButton =
+            document.querySelector(
+                ".efficacy.selected"
+            );
+
+        var attack = {
+
+            date: date,
+
+            time: $("time").value,
+
+            pain: $("pain").value,
+
+            symptoms: symptoms,
+
+            medicine:
+                medicineButton
+                    ? medicineButton.dataset.value
+                    : "",
+
+            efficacy:
+                efficacyButton
+                    ? efficacyButton.dataset.value
+                    : "",
+
+            notes:
+                $("confirmedNote")
+                    .classList
+                    .contains("visible")
+                    ? $("confirmedNote")
+                        .textContent
+                        .trim()
+                    : $("notes")
+                        .value
+                        .trim()
+
+        };
+
+        var attacks =
+            getAttacks();
+
+        attacks.push(attack);
+
+        if (!storeAttacks(attacks)) {
+            return;
+        }
+
+        document
+            .querySelectorAll(
+                ".custom-symptom"
+            )
+            .forEach(function (item) {
+
+                item.remove();
+
+            });
+
+        var customMedicine =
+            document.getElementById(
+                "customMedicineChoice"
+            );
+
+        if (customMedicine) {
+            customMedicine.remove();
+        }
+
+        document
+            .querySelectorAll(
+                ".choice.selected"
+            )
+            .forEach(function (item) {
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            });
+
+        $("pain").value = "";
+
+        $("notes").value = "";
+
+        $("customSymptom").value = "";
+
+        $("otherMedicine").value = "";
+
+        $("confirmedNote")
+            .textContent = "";
+
+        $("confirmedNote")
+            .classList
+            .remove("visible");
+
+        setNow();
+
+        renderHistory();
+
+    },
+    false
+);
+
+
+/* =========================
+   CRONOLOGIA
+   ========================= */
+
+function renderHistory() {
+
+    var attacks =
+        getAttacks();
+
+    attacks.sort(
+        function (a, b) {
+
+            return (
+                (b.date || "") +
+                (b.time || "")
+            ).localeCompare(
+                (a.date || "") +
+                (a.time || "")
+            );
+
+        }
+    );
+
+    var history =
+        $("history");
+
+    if (!attacks.length) {
+
+        history.textContent =
+            "...";
+
+        return;
+    }
+
+    history.innerHTML =
+        "";
+
+    attacks.forEach(
+        function (attack, index) {
+
+            var entry =
+                document.createElement(
+                    "div"
+                );
+
+            entry.className =
+                "entry";
+
+
+            var date =
+                document.createElement(
+                    "div"
+                );
+
+            date.className =
+                "entry-date";
+
+            date.textContent =
+                (attack.date || "") +
+                (
+                    attack.time
+                        ? " · " +
+                          attack.time
+                        : ""
+                );
+
+            entry.appendChild(date);
+
+
+            var meta =
+                document.createElement(
+                    "div"
+                );
+
+            meta.className =
+                "entry-meta";
+
+            meta.textContent =
+                attack.pain
+                    ? attack.pain
+                    : "Intensità non indicata";
+
+            if (
+                attack.symptoms &&
+                attack.symptoms.length
+            ) {
+
+                meta.textContent +=
+                    " · " +
+                    attack.symptoms.join(
+                        ", "
+                    );
+
+            }
+
+            entry.appendChild(meta);
+
+
+            if (attack.medicine) {
+
+                var medicine =
+                    document.createElement(
+                        "div"
+                    );
+
+                medicine.className =
+                    "entry-info";
+
+                medicine.innerHTML =
+                    "<b>Farmaco:</b> " +
+                    escapeHTML(
+                        attack.medicine
+                    );
+
+                entry.appendChild(
+                    medicine
+                );
+
+            }
+
+
+            if (attack.efficacy) {
+
+                var efficacy =
+                    document.createElement(
+                        "div"
+                    );
+
+                efficacy.className =
+                    "entry-info";
+
+                efficacy.innerHTML =
+                    "<b>Farmaco efficace:</b> " +
+                    escapeHTML(
+                        attack.efficacy
+                    );
+
+                entry.appendChild(
+                    efficacy
+                );
+
+            }
+
+
+            if (attack.notes) {
+
+                var notes =
+                    document.createElement(
+                        "div"
+                    );
+
+                notes.className =
+                    "entry-info";
+
+                notes.innerHTML =
+                    "<b>Note:</b> " +
+                    escapeHTML(
+                        attack.notes
+                    );
+
+                entry.appendChild(
+                    notes
+                );
+
+            }
+
+
+            var deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+            deleteButton.type =
+                "button";
+
+            deleteButton.className =
+                "delete-button";
+
+            deleteButton.textContent =
+                "Elimina";
+
+
+            deleteButton.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        !window.confirm(
+                            "Eliminare questo attacco?"
+                        )
+                    ) {
+
+                        return;
+                    }
+
+                    var current =
+                        getAttacks();
+
+                    current.sort(
+                        function (a, b) {
+
+                            return (
+                                (b.date || "") +
+                                (b.time || "")
+                            ).localeCompare(
+                                (a.date || "") +
+                                (a.time || "")
+                            );
+
+                        }
+                    );
+
+                    current.splice(
+                        index,
+                        1
+                    );
+
+                    storeAttacks(
+                        current
+                    );
+
+                    renderHistory();
+
+                },
+                false
+            );
+
+
+            entry.appendChild(
+                deleteButton
+            );
+
+            history.appendChild(
+                entry
+            );
+
+        }
+    );
+}
+
+
+/* =========================
+   ESPORTA
+   ========================= */
+
+$("exportButton").addEventListener(
+    "click",
+    async function () {
+
+        var attacks =
+            getAttacks();
+
+        if (!attacks.length) {
+
+            alert(
+                "Non ci sono ancora attacchi da esportare."
+            );
+
+            return;
+        }
+
+        attacks.sort(
+            function (a, b) {
+
+                return (
+                    (b.date || "") +
+                    (b.time || "")
+                ).localeCompare(
+                    (a.date || "") +
+                    (a.time || "")
+                );
+
+            }
+        );
+
+        var text =
+            "DIARIO EMICRANIA\n\n";
+
+        attacks.forEach(
+            function (attack) {
+
+                text +=
+                    "Data: " +
+                    (attack.date || "-") +
+                    "\n";
+
+                text +=
+                    "Ora: " +
+                    (attack.time || "-") +
+                    "\n";
+
+                text +=
+                    "Intensità: " +
+                    (
+                        attack.pain ||
+                        "Non so"
+                    ) +
+                    "\n";
+
+                text +=
+                    "Sintomi: " +
+                    (
+                        attack.symptoms &&
+                        attack.symptoms.length
+                            ? attack.symptoms.join(
+                                ", "
+                              )
+                            : "-"
+                    ) +
+                    "\n";
+
+                text +=
+                    "Farmaco: " +
+                    (
+                        attack.medicine ||
+                        "-"
+                    ) +
+                    "\n";
+
+                text +=
+                    "Efficacia: " +
+                    (
+                        attack.efficacy ||
+                        "-"
+                    ) +
+                    "\n";
+
+                text +=
+                    "Note: " +
+                    (
+                        attack.notes ||
+                        "-"
+                    ) +
+                    "\n";
+
+                text +=
+                    "\n--------------------\n\n";
+
+            }
+        );
+
+
+        /*
+         * Su iPhone, se disponibile, apriamo
+         * direttamente il foglio di condivisione.
+         */
+
+        if (
+            navigator.share &&
+            window.File &&
+            navigator.canShare
+        ) {
+
+            try {
+
+                var file =
+                    new File(
+                        [text],
+                        "diario-emicrania.txt",
+                        {
+                            type:
+                                "text/plain"
+                        }
+                    );
+
+                if (
+                    navigator.canShare({
+                        files: [file]
+                    })
+                ) {
+
+                    await navigator.share({
+                        files: [file],
+                        title:
+                            "Diario Emicrania",
+                        text:
+                            "Diario Emicrania"
+                    });
+
+                    return;
+
+                }
+
+            } catch (error) {
+
+                /*
+                 * Se l'utente chiude il foglio
+                 * di condivisione, non facciamo nulla.
+                 */
+
+                if (
+                    error &&
+                    error.name ===
+                    "AbortError"
+                ) {
+
+                    return;
+                }
+
+            }
+
+        }
+
+
+        /*
+         * Fallback per browser che non
+         * supportano la condivisione di file.
+         */
+
+        var blob =
+            new Blob(
+                [text],
+                {
+                    type:
+                        "text/plain;charset=utf-8"
+                }
+            );
+
+        var url =
+            URL.createObjectURL(
+                blob
+            );
+
+        var link =
+            document.createElement(
+                "a"
+            );
+
+        link.href =
+            url;
+
+        link.download =
+            "diario-emicrania.txt";
+
+        link.style.display =
+            "none";
+
+        document.body.appendChild(
+            link
+        );
+
+        link.click();
+
+        document.body.removeChild(
+            link
+        );
+
+        setTimeout(
+            function () {
+
+                URL.revokeObjectURL(
+                    url
+                );
+
+            },
+            1000
+        );
+
+    },
+    false
+);
+
+
+/* =========================
+   AVVIO
+   ========================= */
+
+setNow();
+
+renderHistory();
+
+
+/*
+ * SERVICE WORKER
+ *
+ * Funziona quando la PWA viene aperta
+ * tramite HTTPS.
+ */
+
+if (
+    "serviceWorker" in navigator &&
+    location.protocol === "https:"
+) {
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            navigator.serviceWorker
+                .register(
+                    "./sw.js"
+                )
+                .catch(
+                    function (error) {
+
+                        console.log(
+                            "Service Worker:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+})();
+
+</script>
+
+</body>
+</html>
